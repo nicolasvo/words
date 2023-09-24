@@ -7,7 +7,5 @@ RUN chmod +x run.sh
 RUN apt update && apt install -y python3-pip
 RUN pip3 install -r requirements.txt
 
-ENV DB_NAME="/data/words.db"
-
 ENTRYPOINT ["bash"]
 CMD ["run.sh"]
