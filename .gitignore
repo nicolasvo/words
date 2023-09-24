@@ -1,0 +1,6 @@
+Pipfile.lock
+.vscode
+*.db
+*.ipynb
+__pycache__/
+.git.bak/

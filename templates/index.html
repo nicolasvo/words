@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="font-serif text-5xl font-semibold">words</h1>
+
+{% if not user_logged_in %}
+<br>
+<p class="font-serif text-lg">you are not logged in.</p>
+<br>
+<a class="hover:text-red-800 font-serif text-lg underline underline-offset-2" href="{{ url_for('auth') }}">login or register</a>
+{% else %}
+<br>
+<p id="gugu" class="font-serif text-lg">hi, {{ username }}.</p>
+<form id="gaga" x-data action="{{ url_for('logout') }}" @submit.prevent="if (confirm('you want to log out? 😮')) $el.submit()" method="get">
+    <button class="hover:text-red-800 font-serif text-lg underline underline-offset-2">click here to log out.</button>
+</form>
+<br>
+<style>
+    #gugu,
+    #gaga {
+        display: inline-block;
+    }
+</style>
+<!-- Include the words.html template here -->
+{% include "words.html" %}
+{% endif %}
+{% endblock %}

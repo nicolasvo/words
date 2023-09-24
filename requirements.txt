@@ -1,0 +1,9 @@
+translators
+fastapi
+jinja2
+uvicorn
+sqlalchemy 
+databases
+aiosqlite
+python-multipart
+passlib

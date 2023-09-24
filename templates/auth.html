@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="font-serif text-5xl font-semibold">login or register</h1>
+<br>
+
+<form method="post" action="{{ url_for('auth') }}">
+    <label class="font-serif text-lg" for="username">username:</label>
+    <input class="font-serif border-b focus:outline-none focus:border-red-800 focus:border-dashed placeholder:italic" placeholder="username" type="text" name="username" required><br>
+
+    <label class="font-serif text-lg" for="password">password:</label>
+    <input class="font-serif border-b focus:outline-none focus:border-red-800 focus:border-dashed placeholder:italic" placeholder="password" type="password" name="password" required><br>
+
+    <div>
+        <br>
+        <input class="hover:text-red-800 cursor-pointer font-serif text-lg underline underline-offset-2" type="submit" name="login" value="login">
+        <span class="font-serif text-lg">or</span>
+        <input class="hover:text-red-800 cursor-pointer font-serif text-lg underline underline-offset-2" type="submit" name="register" value="register">
+    </div>
+</form>
+
+{% if error_message is not none %}
+<br>
+<p class="font-serif text-lg text-red-800">{{ error_message }}</p>
+{% endif %}
+{% endblock %}
