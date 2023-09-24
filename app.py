@@ -156,4 +156,6 @@ async def update_languages(
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run(app, host="0.0.0.0", port=8000, proxy_headers=True, forwarded_allow_ips="*")
+    uvicorn.run(
+        app, host="0.0.0.0", port=8000, proxy_headers=True, forwarded_allow_ips="*"
+    )
