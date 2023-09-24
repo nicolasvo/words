@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Request, Depends, Form
 from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from passlib.context import CryptContext
 import translators as ts
@@ -8,6 +9,7 @@ from constants import available_languages
 from db import *
 
 app = FastAPI()
+app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
 
@@ -154,4 +156,6 @@ async def update_languages(
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run(app, host="0.0.0.0", port=8000, proxy_headers=True, forwarded_allow_ips="*")
+    uvicorn.run(
+        app, host="0.0.0.0", port=8000, proxy_headers=True, forwarded_allow_ips="*"
+    )

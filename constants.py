@@ -1,6 +1,6 @@
 import os
 
-db_name = os.getenv("DB_NAME") if os.getenv("DB_NAME") else "words.db"
+db_path = os.getenv("DB_PATH") if os.getenv("DB_PATH") else "words.db"
 
 available_languages = [
     {"language": "Afrikaans", "code": "af"},

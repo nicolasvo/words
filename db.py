@@ -2,7 +2,7 @@ from fastapi import Cookie
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 
-from constants import db_name
+from constants import db_path
 
 # Define a User model using SQLAlchemy
 Base = declarative_base()
@@ -20,7 +20,7 @@ class User(Base):
 def connect_db():
     import sqlite3
 
-    return sqlite3.connect(db_name)
+    return sqlite3.connect(db_path)
 
 
 # Function to check if a user is logged in using a cookie
