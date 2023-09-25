@@ -37,14 +37,18 @@
     </div>
 </div>
 {% if languages|length > 0 %}
-
-<div x-data="{ sortByColumn: null }">
+<div x-data="{ hiddenColumns: {} }">
     <table class="border border-collapse">
         <thead>
             <tr>
                 {% for language in languages -%}
-                <td class="p-2 border border-collapse font-serif cursor-pointer"
-                    @click="sortByColumn = '{{ language }}'">
+                <td class="p-2 border border-collapse font-serif cursor-pointer" @click="
+                        if (hiddenColumns['{{ language }}']) {
+                            hiddenColumns['{{ language }}'] = false;
+                        } else {
+                            hiddenColumns['{{ language }}'] = true;
+                        }
+                    ">
                     {{ language }}
                 </td>
                 {% endfor %}
@@ -53,16 +57,14 @@
         <tbody>
             {% for word in words -%}
             <tr>
-                {% for language in languages -%}
-                <div class='hover:text-red-800 p-2'
-                    :class="{ 'hover:text-red-800 p-2': sortByColumn === '{{ language }}' }">
+                <div style="display: none" :class="{ 'hover:text-red-800 p-2': !hiddenColumns['{{ language }}'] }">
+                    {% for language in languages -%}
                     <td class="hover:text-red-800 p-2 border border-collapse font-serif"
-                        x-show="sortByColumn !== '{{ language }}'">{{ word[language]["word"] }}</td>
+                        x-show="!hiddenColumns['{{ language }}']">{{ word[language]["word"] }}</td>
                     <td class="hover:text-red-800 p-2 border border-collapse font-serif"
-                        x-show="sortByColumn === '{{ language }}'" x-model="word[language]['word']"></td>
+                        x-show="hiddenColumns['{{ language }}']" x-model="word[language]['word']">🙈</td>
+                    {% endfor %}
                 </div>
-
-                {% endfor %}
                 <td class="p-2 border border-collapse">
                     <form method="get" action="{{ url_for('delete_word') }}">
                         <input type="hidden" name="submission_id" value="{{ word['submission_id'] }}">
@@ -81,5 +83,6 @@
         </tbody>
     </table>
 </div>
+
 {% endif %}
 {% endblock %}
