@@ -5,12 +5,14 @@
     <input
         class="text-red-800 font-serif border-b focus:outline-none focus:border-red-800 focus:border-dashed placeholder:italic"
         placeholder="type a word in any language" type="text" id="word" name="word" required>
-    <input class="hover:text-red-800 cursor-pointer font-serif text-lg underline underline-offset-2 mx-2" type="submit" value="add word">
+    <input class="hover:text-red-800 cursor-pointer font-serif text-lg underline underline-offset-2 mx-2" type="submit"
+        value="add word">
 </form>
 <br>
 {% endif %}
 <div x-data="{ open: false }">
-    <button x-on:click="open = ! open" class="lg:hover:text-red-800 font-serif text-lg underline underline-offset-2">select languages</button>
+    <button x-on:click="open = ! open"
+        class="lg:hover:text-red-800 font-serif text-lg underline underline-offset-2">select languages</button>
     <br>
     <br>
     <div x-show="open">
@@ -35,41 +37,52 @@
     </div>
 </div>
 {% if languages|length > 0 %}
-<table class="border border-collapse">
-    <thead>
-        <tr>
-            {% for language in languages -%}
-            <td class="p-2 border border-collapse font-serif">
-                {{ language }}
-            </td>
+<div x-data="{ hiddenColumns: {} }">
+    <table class="border border-collapse">
+        <thead>
+            <tr>
+                {% for language in languages -%}
+                <td class="p-2 border border-collapse font-serif cursor-pointer" @click="
+                        if (hiddenColumns['{{ language }}']) {
+                            hiddenColumns['{{ language }}'] = false;
+                        } else {
+                            hiddenColumns['{{ language }}'] = true;
+                        }
+                    ">
+                    {{ language }}
+                </td>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for word in words -%}
+            <tr>
+                <div style="display: none" :class="{ 'hover:text-red-800 p-2': !hiddenColumns['{{ language }}'] }">
+                    {% for language in languages -%}
+                    <td class="hover:text-red-800 p-2 border border-collapse font-serif"
+                        x-show="!hiddenColumns['{{ language }}']">{{ word[language]["word"] }}</td>
+                    <td class="hover:text-red-800 p-2 border border-collapse font-serif"
+                        x-show="hiddenColumns['{{ language }}']" x-model="word[language]['word']">🙈</td>
+                    {% endfor %}
+                </div>
+                <td class="p-2 border border-collapse">
+                    <form method="get" action="{{ url_for('delete_word') }}">
+                        <input type="hidden" name="submission_id" value="{{ word['submission_id'] }}">
+                        <button class="flex justify-center items-center" type="submit">
+                            <svg class="hover:text-red-800 object-scale-down h-5 stroke-greenish-dark"
+                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" fill="none"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                        </button>
+                    </form>
+                </td>
+            </tr>
             {% endfor %}
-        </tr>
-        {% if words is not none %}
-    </thead>
-    <tbody>
-        {% for word in words -%}
-        <tr>
-            {% for language in languages -%}
-            <td class="hover:text-red-800 p-2 border border-collapse font-serif">
-                {{ word[language]["word"] }}
-            </td>
-            {% endfor %}
-            <td class="p-2 border border-collapse">
-                <form method="get" action="{{ url_for('delete_word') }}">
-                    <input type="hidden" name="submission_id" value="{{ word['submission_id'] }}">
-                    <button class="flex justify-center items-center" type="submit">
-                        <svg class="hover:text-red-800 object-scale-down h-5 stroke-greenish-dark" xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 25 25" fill="none" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
-                    </button>
-                </form>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-    {% endif %}
-</table>
+        </tbody>
+    </table>
+</div>
+
 {% endif %}
 {% endblock %}
